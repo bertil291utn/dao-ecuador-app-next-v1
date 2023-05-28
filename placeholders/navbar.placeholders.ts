@@ -6,12 +6,14 @@ export const navbarItems = [
     id: 1,
     title: 'Propuestas',
     path: 'proposals',
-    icon: SlDocs
+    active: false,
+    // icon: SlDocs
   },
   {
     id: 2,
     title: 'Miembros',
     path: 'members',
-    icon: IoIosPeople
+    active: false,
+    // icon: IoIosPeople
   }
 ]

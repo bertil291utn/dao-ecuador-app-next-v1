@@ -1,11 +1,28 @@
+'use client';
+
 import { INavbarItem } from 'interfaces/navbar';
 import Link from 'next/link';
+import { useState } from 'react';
 
 interface IProps {
   navbarItems: Array<INavbarItem>
 }
 
 export default function Navbar({ navbarItems }: IProps) {
+  const [_navbarItems, setNavbarItems] = useState(navbarItems);
+
+  const handleClick = (id: number) => () => {
+    setNavbarItems((prev) => {
+      const _prev = [...prev];
+
+      return _prev.map(elem => ({ ...elem, active: false })).map(elem =>
+        elem.id == id ? ({ ...elem, active: !elem.active }) : elem
+      )
+
+    })
+
+  }
+
   return (
 
     <div>
@@ -18,11 +35,15 @@ export default function Navbar({ navbarItems }: IProps) {
               </a>
               <div className="hidden md:block">
                 <div className="flex items-baseline ml-10 space-x-4">
-                  {navbarItems.map(elem => (
+                  {_navbarItems.map((elem, index) => (
                     <Link
+                      key={`tab-${index}`}
                       href={`/${elem.path}`}
-                      className="text-gray-300  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                      <span className='capitalize'>
+                      className={`${elem.active ? 'text-white' : 'text-gray-500'}  hover:text-gray-800 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium`}
+                    >
+                      <span className='capitalize'
+                        onClick={handleClick(elem.id)}
+                      >
                         {elem.title}
                       </span>
                     </Link>))}
@@ -47,10 +68,12 @@ export default function Navbar({ navbarItems }: IProps) {
         </div>
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navbarItems.map(elem => (
+            {_navbarItems.map((elem, index) => (
               <Link
+                key={`tab-${index}`}
                 href={`/${elem.path}`}
-                className="text-gray-300 hover:text-gray-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                className={`${elem.active ? 'text-white' : 'text-gray-500'} text-gray-300 hover:text-gray-800 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium`}
+              >
                 {<span className='capitalize'>
                   {elem.title}
                 </span>}
